@@ -501,11 +501,10 @@ export const en: Dict = {
   openSource: {
     title: 'Open source',
     lead:
-      'The two components every system shares are developed in public. Their source code is on GitHub.',
+      'The two components every system shares are developed in public and released under the Apache License 2.0.',
     repos: [
       {
         name: 'uspace-core',
-        url: 'https://github.com/rootxkit/uspace-core',
         kind: 'Go library',
         body: 'The shared judgement library. A library, not a service: no process, no port, no database. Each system compiles it in and pins a released version, so every safety judgement lives in one place.',
         items: [
@@ -519,7 +518,6 @@ export const en: Dict = {
       },
       {
         name: 'uspace-ui',
-        url: 'https://github.com/rootxkit/uspace-ui',
         kind: 'UI kit',
         body: 'The shared interface kit the consoles and portals are built on. It renders what each system’s API says and judges nothing.',
         items: [
@@ -530,10 +528,9 @@ export const en: Dict = {
         ],
       },
     ],
-    viewRepo: 'View on GitHub',
     reportTitle: 'Reporting a vulnerability',
     report:
-      'Please report security issues privately through GitHub’s private vulnerability reporting on the repository concerned, not in a public issue.',
+      'Please report security issues privately by email to info@chikox.net, not in public.',
     otherTitle: 'The systems themselves',
     other:
       'The four systems are built on these components. Their source is not published on this site.',

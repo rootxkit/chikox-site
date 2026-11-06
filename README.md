@@ -38,7 +38,7 @@ npm run verify    # check, build, link check and forbidden-string check
 
 Content rules: the site describes the platform at the level of principles.
 It names no hostnames, addresses, sign-in URLs, configuration names,
-customers, countries or agencies, and links only to public repositories.
+customers, countries or agencies, and no repository or GitHub links.
 `scripts/check-forbidden.mjs` enforces part of this; review covers the rest.
 
 ## Cloudflare Workers

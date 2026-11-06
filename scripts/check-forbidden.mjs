@@ -19,6 +19,9 @@ const FORBIDDEN = [
   'Sakaeronavigatsia',
   'uas.gov.ge',
   'DigitalOcean',
+  'github',
+  'GitHub',
+  'rootxkit',
 ];
 const TEXT = /\.(html|xml|txt|css|js|svg|json|webmanifest)$/;
 

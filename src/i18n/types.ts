@@ -182,8 +182,7 @@ export interface Dict {
   openSource: {
     title: string;
     lead: string;
-    repos: { name: string; url: string; kind: string; body: string; items: string[] }[];
-    viewRepo: string;
+    repos: { name: string; kind: string; body: string; items: string[] }[];
     reportTitle: string;
     report: string;
     otherTitle: string;
