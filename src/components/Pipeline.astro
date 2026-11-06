@@ -1,0 +1,115 @@
+---
+// A left-to-right pipeline diagram as inline SVG, with a top-to-bottom
+// variant for narrow screens. Colours come from the theme tokens, so it
+// follows light and dark mode. All text comes from the dictionary.
+import type { Pipeline } from '../i18n/types';
+
+interface Props {
+  id: string;
+  pipeline: Pipeline;
+  /** Draw the first link dashed: a one-way radio broadcast. */
+  radioFirst?: boolean;
+  caption?: string;
+}
+
+const { id, pipeline, radioFirst = false, caption } = Astro.props;
+const { steps, links } = pipeline;
+const n = steps.length;
+const maxLines = Math.max(...steps.map((s) => s.lines.length));
+const hasLabels = links.some((l) => l.length > 0);
+
+// Horizontal layout.
+const W = 960;
+const boxW = n >= 4 ? 222 : 210;
+const gapH = (W - n * boxW) / (n - 1);
+const boxH = 44 + maxLines * 19 + 14;
+const topH = hasLabels ? 44 : 8;
+const H = topH + boxH + 8;
+const boxesH = steps.map((s, i) => ({ ...s, x: i * (boxW + gapH), y: topH }));
+
+// Vertical layout.
+const VW = 340;
+const vBoxW = 300;
+const vBoxH = 44 + maxLines * 20 + 12;
+const vGap = hasLabels ? 72 : 44;
+const VH = n * vBoxH + (n - 1) * vGap + 4;
+const boxesV = steps.map((s, i) => ({ ...s, x: 20, y: 2 + i * (vBoxH + vGap) }));
+
+const titleId = `${id}-title`;
+---
+
+<figure class="diagram">
+  <div class="only-wide">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${titleId}-w`}>
+      <title id={`${titleId}-w`}>{pipeline.label}</title>
+      <defs>
+        <marker id={`${id}-hw`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path class="d-head" d="M0,0 L10,5 L0,10 z"></path>
+        </marker>
+      </defs>
+      {
+        boxesH.map((b, i) => (
+          <g>
+            <rect class={i === n - 1 ? 'd-box-accent' : 'd-box'} x={b.x + 1} y={b.y} width={boxW - 2} height={boxH} rx="10"></rect>
+            <text class="d-title" x={b.x + boxW / 2} y={b.y + 30} text-anchor="middle" font-size="17">{b.title}</text>
+            {b.lines.map((line, j) => (
+              <text class="d-text" x={b.x + boxW / 2} y={b.y + 54 + j * 19} text-anchor="middle" font-size="13">{line}</text>
+            ))}
+          </g>
+        ))
+      }
+      {
+        links.map((label, i) => {
+          const x1 = boxesH[i]!.x + boxW + 4;
+          const x2 = boxesH[i + 1]!.x - 6;
+          const y = topH + boxH / 2;
+          return (
+            <g>
+              <line class={radioFirst && i === 0 ? 'd-radio' : 'd-edge'} x1={x1} y1={y} x2={x2} y2={y} marker-end={`url(#${id}-hw)`}></line>
+              {label.map((line, j) => (
+                <text class="d-label" x={(x1 + x2) / 2} y={topH - 14 - (label.length - 1 - j) * 16} text-anchor="middle" font-size="13">{line}</text>
+              ))}
+            </g>
+          );
+        })
+      }
+    </svg>
+  </div>
+  <div class="only-narrow">
+    <svg viewBox={`0 0 ${VW} ${VH}`} role="img" aria-labelledby={`${titleId}-n`}>
+      <title id={`${titleId}-n`}>{pipeline.label}</title>
+      <defs>
+        <marker id={`${id}-hn`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path class="d-head" d="M0,0 L10,5 L0,10 z"></path>
+        </marker>
+      </defs>
+      {
+        boxesV.map((b, i) => (
+          <g>
+            <rect class={i === n - 1 ? 'd-box-accent' : 'd-box'} x={b.x} y={b.y} width={vBoxW} height={vBoxH} rx="10"></rect>
+            <text class="d-title" x={b.x + vBoxW / 2} y={b.y + 30} text-anchor="middle" font-size="17">{b.title}</text>
+            {b.lines.map((line, j) => (
+              <text class="d-text" x={b.x + vBoxW / 2} y={b.y + 54 + j * 20} text-anchor="middle" font-size="14">{line}</text>
+            ))}
+          </g>
+        ))
+      }
+      {
+        links.map((label, i) => {
+          const x = hasLabels ? 70 : VW / 2;
+          const y1 = boxesV[i]!.y + vBoxH + 4;
+          const y2 = boxesV[i + 1]!.y - 6;
+          return (
+            <g>
+              <line class={radioFirst && i === 0 ? 'd-radio' : 'd-edge'} x1={x} y1={y1} x2={x} y2={y2} marker-end={`url(#${id}-hn)`}></line>
+              {label.map((line, j) => (
+                <text class="d-label" x={x + 14} y={(y1 + y2) / 2 + 5 + (j - (label.length - 1) / 2) * 17} font-size="14">{line}</text>
+              ))}
+            </g>
+          );
+        })
+      }
+    </svg>
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

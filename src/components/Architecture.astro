@@ -1,0 +1,112 @@
+---
+// The architecture of the four systems and the sensors as inline SVG.
+// Colours come from the theme tokens; all text comes from the dictionary.
+// The same flows are listed as text below the figure for small screens
+// and for screen readers.
+import type { ArchitectureLabels } from '../i18n/types';
+
+interface Props {
+  labels: ArchitectureLabels;
+}
+
+const { labels: L } = Astro.props;
+
+const W = 1000;
+const H = 604;
+const bw = 230;
+const bh = 84;
+
+type BoxKey = keyof ArchitectureLabels['boxes'];
+const pos: Record<BoxKey, { x: number; y: number; h: number; accent: boolean }> = {
+  authority: { x: 20, y: 180, h: bh, accent: true },
+  cisp: { x: 385, y: 30, h: bh, accent: true },
+  ussp: { x: 750, y: 180, h: bh, accent: true },
+  ansp: { x: 385, y: 300, h: bh, accent: true },
+  ridRx: { x: 20, y: 450, h: 74, accent: false },
+  adsbRx: { x: 385, y: 450, h: 74, accent: false },
+  operators: { x: 750, y: 450, h: 74, accent: false },
+};
+const boxes = (Object.keys(pos) as BoxKey[]).map((k) => ({ key: k, ...pos[k], ...L.boxes[k] }));
+
+interface Edge {
+  d: string;
+  both?: boolean;
+  labels: { x: number; y: number; anchor: 'start' | 'middle' | 'end'; text: string }[];
+}
+
+const edges: Edge[] = [
+  { d: 'M135,448 L135,267', labels: [{ x: 147, y: 400, anchor: 'start', text: L.edges.observations }] },
+  { d: 'M500,448 L500,387', labels: [{ x: 488, y: 422, anchor: 'end', text: L.edges.tunnel }] },
+  { d: 'M190,178 L382,84', labels: [{ x: 282, y: 108, anchor: 'end', text: L.edges.zones }] },
+  { d: 'M560,298 L560,117', labels: [{ x: 572, y: 152, anchor: 'start', text: L.edges.restrictions }] },
+  { d: 'M617,82 L797,177', labels: [{ x: 700, y: 106, anchor: 'start', text: L.edges.publications }] },
+  { d: 'M748,222 L253,222', labels: [{ x: 400, y: 211, anchor: 'middle', text: L.edges.netId }] },
+  { d: 'M383,322 L254,253', labels: [{ x: 372, y: 352, anchor: 'end', text: L.edges.manned }] },
+  { d: 'M617,322 L746,253', labels: [{ x: 640, y: 352, anchor: 'start', text: L.edges.manned }] },
+  {
+    d: 'M865,448 L865,267',
+    both: true,
+    labels: [
+      { x: 853, y: 396, anchor: 'end', text: L.edges.operatorsUp },
+      { x: 853, y: 415, anchor: 'end', text: L.edges.operatorsDown },
+    ],
+  },
+];
+
+const radio = [
+  { cx: 135, text: L.radio.drones },
+  { cx: 500, text: L.radio.manned },
+];
+---
+
+<figure class="diagram">
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="arch-title">
+    <title id="arch-title">{L.label}</title>
+    <defs>
+      <marker id="arch-h" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+        <path class="d-head" d="M0,0 L10,5 L0,10 z"></path>
+      </marker>
+    </defs>
+
+    {
+      edges.map((e) => (
+        <path
+          class="d-edge"
+          d={e.d}
+          marker-end="url(#arch-h)"
+          marker-start={e.both ? 'url(#arch-h)' : undefined}
+        ></path>
+      ))
+    }
+
+    {
+      radio.map((r) => (
+        <g>
+          <line class="d-radio" x1={r.cx} y1="572" x2={r.cx} y2="528" marker-end="url(#arch-h)"></line>
+          <text class="d-text" x={r.cx} y="594" text-anchor="middle" font-size="13" font-style="italic">{r.text}</text>
+        </g>
+      ))
+    }
+
+    {
+      boxes.map((b) => (
+        <g>
+          <rect class={b.accent ? 'd-box-accent' : 'd-box'} x={b.x} y={b.y} width={bw} height={b.h} rx="10"></rect>
+          <text class="d-title" x={b.x + bw / 2} y={b.y + (b.lines.length > 1 ? 28 : 31)} text-anchor="middle" font-size="17">{b.title}</text>
+          {b.lines.map((line, j) => (
+            <text class="d-text" x={b.x + bw / 2} y={b.y + (b.lines.length > 1 ? 51 : 55) + j * 18} text-anchor="middle" font-size="13.5">{line}</text>
+          ))}
+        </g>
+      ))
+    }
+
+    {
+      edges.flatMap((e) =>
+        e.labels.map((l) => (
+          <text class="d-label" x={l.x} y={l.y} text-anchor={l.anchor} font-size="13">{l.text}</text>
+        )),
+      )
+    }
+  </svg>
+  <figcaption>{L.footnote}</figcaption>
+</figure>

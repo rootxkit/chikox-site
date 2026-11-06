@@ -1,0 +1,42 @@
+---
+// One 404 page for both locales: the host serves it for any unknown path,
+// so it cannot know which language was asked for. Georgian first.
+import Base from '../layouts/Base.astro';
+import { pathFor, t } from '../i18n';
+
+const ka = t('ka').notFound;
+const en = t('en').notFound;
+---
+
+<Base locale="ka" route={null}>
+  <section class="page-head nf">
+    <div class="wrap">
+      <p class="code" aria-hidden="true">404</p>
+      <h1>{ka.title}</h1>
+      <p class="lead">{ka.body}</p>
+      <p><a class="btn btn-primary" href={pathFor('ka', 'home')}>{ka.home}</a></p>
+      <div lang="en" class="en">
+        <h2>{en.title}</h2>
+        <p class="muted">{en.body}</p>
+        <p><a href={pathFor('en', 'home')}>{en.home}</a></p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-bottom: 3rem;
+  }
+  .code {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0;
+  }
+  .en {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+</style>

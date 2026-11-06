@@ -1,0 +1,73 @@
+---
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const s = t(locale).security;
+---
+
+<header class="page-head">
+  <div class="wrap">
+    <h1>{s.title}</h1>
+    <p class="lead">{s.lead}</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap grid grid-2">
+    {
+      s.principles.map((p) => (
+        <div class="card">
+          <h2 class="h3">{p.title}</h2>
+          {p.body && <p>{p.body}</p>}
+          {p.items && (
+            <ul>
+              {p.items.map((i) => <li>{i}</li>)}
+            </ul>
+          )}
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<section class="section" aria-labelledby="standards">
+  <div class="wrap">
+    <h2 id="standards">{s.standardsTitle}</h2>
+    <p class="lead">{s.standardsLead}</p>
+    <div class="table-wrap card">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">{s.standardsHead.name}</th>
+            <th scope="col">{s.standardsHead.scope}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            s.standards.map((row) => (
+              <tr>
+                <td>{row.name}</td>
+                <td>{row.scope}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+    <p class="muted note">{s.standardsNote}</p>
+  </div>
+</section>
+
+<style>
+  .h3 {
+    font-size: 1.125rem;
+  }
+  .note {
+    margin-top: 1rem;
+    font-size: 0.925rem;
+  }
+</style>

@@ -1,0 +1,66 @@
+---
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const o = t(locale).openSource;
+---
+
+<header class="page-head">
+  <div class="wrap">
+    <h1>{o.title}</h1>
+    <p class="lead">{o.lead}</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap grid grid-2">
+    {
+      o.repos.map((r) => (
+        <article class="card repo">
+          <p class="kind">{r.kind}</p>
+          <h2>{r.name}</h2>
+          <p>{r.body}</p>
+          <ul>
+            {r.items.map((i) => <li>{i}</li>)}
+          </ul>
+          <p>
+            <a class="btn btn-secondary" href={r.url} rel="noopener">
+              {o.viewRepo}
+              <span class="visually-hidden"> — {r.name}</span>
+            </a>
+          </p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap grid grid-2">
+    <div>
+      <h2>{o.reportTitle}</h2>
+      <p>{o.report}</p>
+    </div>
+    <div>
+      <h2>{o.otherTitle}</h2>
+      <p>{o.other}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kind {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 0.25rem;
+  }
+  .repo h2 {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    font-size: 1.4rem;
+  }
+</style>

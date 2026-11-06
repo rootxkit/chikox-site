@@ -1,0 +1,45 @@
+---
+import { CONTACT_EMAIL, t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = t(locale).contact;
+---
+
+<header class="page-head">
+  <div class="wrap">
+    <h1>{c.title}</h1>
+    <p class="lead">{c.lead}</p>
+  </div>
+</header>
+
+<section class="section">
+  <div class="wrap grid grid-2">
+    <div class="card">
+      <h2 class="h3">{c.emailLabel}</h2>
+      <p class="email"><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+      <h2 class="h3">{c.topicsTitle}</h2>
+      <ul>
+        {c.topics.map((topic) => <li>{topic}</li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 class="h3">{c.privacyTitle}</h2>
+      <p>{c.privacy}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .h3 {
+    font-size: 1.125rem;
+  }
+  .email {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+</style>

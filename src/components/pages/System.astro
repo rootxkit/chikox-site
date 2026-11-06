@@ -1,0 +1,81 @@
+---
+import Screenshots from '../Screenshots.astro';
+import { pathFor, t, type Locale, type SystemKey } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  system: SystemKey;
+}
+
+const { locale, system } = Astro.props;
+const d = t(locale);
+const s = d.systems[system];
+---
+
+<header class="page-head">
+  <div class="wrap">
+    <span class="eyebrow">{s.role}</span>
+    <h1>{s.name}</h1>
+    <p class="lead">{s.lead}</p>
+  </div>
+</header>
+
+<section class="section" aria-labelledby="does">
+  <div class="wrap grid grid-2 split">
+    <div>
+      <h2 id="does">{d.ui.whatItDoes}</h2>
+      <ul class="list-check">
+        {s.does.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+    <div>
+      <h2 id="does-not">{d.ui.whatItDoesNot}</h2>
+      <ul class="list-cross">
+        {s.doesNot.map((item) => <li>{item}</li>)}
+      </ul>
+      <h2 id="interfaces" class="spaced">{d.ui.interfacesAndStandards}</h2>
+      <ul>
+        {s.interfaces.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
+  <div class="wrap">
+    <Screenshots locale={locale} route={system} />
+  </div>
+</section>
+
+<section class="section" aria-labelledby="works-with">
+  <div class="wrap">
+    <h2 id="works-with">{d.ui.worksWith}</h2>
+    <ul class="grid grid-3 rel" role="list">
+      {
+        s.worksWith.map((w) => (
+          <li class="card">
+            <h3>
+              <a href={pathFor(locale, w.system)}>{d.systems[w.system].name}</a>
+            </h3>
+            <p>{w.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+    <p><a href={pathFor(locale, 'platform')}>← {d.ui.backToPlatform}</a></p>
+  </div>
+</section>
+
+<style>
+  .split {
+    gap: 2.5rem;
+  }
+  .spaced {
+    margin-top: 2rem;
+  }
+  .rel {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem;
+  }
+  .rel li + li {
+    margin-top: 0;
+  }
+</style>

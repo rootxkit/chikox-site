@@ -1,0 +1,26 @@
+{
+  "name": "chikox-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "build": "astro build",
+    "preview": "astro preview",
+    "linkcheck": "node scripts/check-links.mjs dist",
+    "verify": "npm run check && npm run build && npm run linkcheck && node scripts/check-forbidden.mjs dist"
+  },
+  "dependencies": {
+    "@fontsource/noto-sans": "^5.3.0",
+    "@fontsource/noto-sans-georgian": "^5.3.0",
+    "astro": "7.3.8"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "typescript": "^6.0.3"
+  }
+}

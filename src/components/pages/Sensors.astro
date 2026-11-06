@@ -1,0 +1,88 @@
+---
+import Pipeline from '../Pipeline.astro';
+import { t, type Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const s = t(locale).sensors;
+const kinds = [
+  { id: 'remote-id', c: s.rid },
+  { id: 'ads-b', c: s.adsb },
+];
+---
+
+<header class="page-head">
+  <div class="wrap">
+    <h1>{s.title}</h1>
+    <p class="lead">{s.lead}</p>
+    <div class="card callout">
+      <h2>{s.receiveOnlyTitle}</h2>
+      <p>{s.receiveOnly}</p>
+    </div>
+  </div>
+</header>
+
+{
+  kinds.map(({ id, c }) => (
+    <section class="section" aria-labelledby={id}>
+      <div class="wrap">
+        <h2 id={id}>{c.title}</h2>
+        <p class="prose">{c.body}</p>
+        <Pipeline id={`${id}-path`} pipeline={c.path} radioFirst />
+        <div class="grid grid-2 two">
+          <div>
+            <h3>{s.receivesTitle}</h3>
+            <ul>
+              {c.receives.map((r) => <li>{r}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3>{c.connectTitle}</h3>
+            <ul>
+              {c.connect.map((r) => <li>{r}</li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))
+}
+
+<section class="section" aria-labelledby="relay">
+  <div class="wrap prose">
+    <h2 id="relay">{s.relay.title}</h2>
+    <p>{s.relay.body}</p>
+    <ul>
+      {s.relay.items.map((r) => <li>{r}</li>)}
+    </ul>
+  </div>
+</section>
+
+<section class="section" aria-labelledby="silent">
+  <div class="wrap prose">
+    <h2 id="silent">{s.silentTitle}</h2>
+    <p>{s.silent}</p>
+  </div>
+</section>
+
+<style>
+  .callout {
+    margin-top: 1.5rem;
+    max-width: 46rem;
+    border-left: 4px solid var(--accent);
+  }
+  .callout h2 {
+    font-size: 1.125rem;
+    margin-bottom: 0.4rem;
+  }
+  .callout p {
+    margin: 0;
+  }
+  .two {
+    margin-top: 2rem;
+    gap: 2rem;
+  }
+</style>

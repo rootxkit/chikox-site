@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>
+    .c { stroke: #0b5cad; fill: none; }
+    .d { fill: #0b5cad; }
+    @media (prefers-color-scheme: dark) { .c { stroke: #6fb1f5; } .d { fill: #6fb1f5; } }
+  </style>
+  <circle class="c" cx="16" cy="16" r="13" stroke-width="2.5"/>
+  <circle class="c" cx="16" cy="16" r="7" stroke-width="2.5" opacity="0.6"/>
+  <circle class="d" cx="16" cy="16" r="3"/>
+</svg>

@@ -1,0 +1,50 @@
+---
+// Renders the screenshots registered for a page in src/data/screenshots.ts.
+// Renders nothing while none are registered.
+import { SCREENSHOTS } from '../data/screenshots';
+import type { Locale, RouteKey } from '../i18n/types';
+
+interface Props {
+  locale: Locale;
+  route: RouteKey;
+}
+
+const { locale, route } = Astro.props;
+const shots = SCREENSHOTS[route] ?? [];
+---
+
+{
+  shots.length > 0 && (
+    <div class="shots">
+      {shots.map((s) => (
+        <figure class="shot">
+          <img src={s.src} width={s.width} height={s.height} alt={s.alt[locale]} loading="lazy" decoding="async" />
+          <figcaption>{s.caption[locale]}</figcaption>
+        </figure>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  .shots {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .shot {
+    margin: 0;
+  }
+  .shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .shot figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.925rem;
+    color: var(--muted);
+  }
+</style>

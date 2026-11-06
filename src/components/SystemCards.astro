@@ -1,0 +1,67 @@
+---
+import { SYSTEM_KEYS, pathFor, t, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const d = t(locale);
+---
+
+<ul class="grid grid-4 cards" role="list">
+  {
+    SYSTEM_KEYS.map((key) => {
+      const s = d.systems[key];
+      return (
+        <li class="card sys-card">
+          <h3>
+            <a href={pathFor(locale, key)}>{s.name}</a>
+          </h3>
+          <p class="role">{s.role}</p>
+          <p>{s.card}</p>
+        </li>
+      );
+    })
+  }
+</ul>
+
+<style>
+  .cards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .cards li + li {
+    margin-top: 0;
+  }
+  .sys-card {
+    position: relative;
+    border-top: 3px solid var(--accent);
+  }
+  .sys-card h3 a {
+    color: var(--fg);
+    text-decoration: none;
+  }
+  .sys-card h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .sys-card:hover {
+    border-color: var(--accent);
+  }
+  .sys-card:focus-within {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  .sys-card h3 a:focus-visible {
+    outline: none;
+  }
+  .role {
+    font-size: 0.875rem;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+</style>

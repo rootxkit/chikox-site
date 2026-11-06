@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Type and template check
+        run: npm run check
+      - name: Build
+        run: npm run build
+      - name: Internal link check
+        run: npm run linkcheck
+      - name: Forbidden-string check
+        run: node scripts/check-forbidden.mjs dist

@@ -1,0 +1,325 @@
+---
+import '../styles/global.css';
+import { FONT_CSS, PRELOAD } from '../styles/fonts';
+import {
+  CONTACT_EMAIL,
+  HEADER_NAV,
+  LOCALES,
+  ROUTE_KEYS,
+  SITE_NAME,
+  SYSTEM_KEYS,
+  otherLocale,
+  pathFor,
+  t,
+  type Locale,
+  type RouteKey,
+} from '../i18n';
+
+interface Props {
+  locale: Locale;
+  /** The page being rendered; null for the 404 page (not indexed, no alternates). */
+  route: RouteKey | null;
+}
+
+const { locale, route } = Astro.props;
+const d = t(locale);
+const other = otherLocale(locale);
+const site = Astro.site ?? new URL('https://chikox.net');
+
+const meta = route ? d.meta[route] : { title: d.notFound.title, description: d.notFound.body };
+const fullTitle = route === 'home' ? meta.title : `${meta.title} — ${SITE_NAME}`;
+const canonical = route ? new URL(pathFor(locale, route), site).href : null;
+const ogImage = new URL('/og.png', site).href;
+const switchHref = route ? pathFor(other, route) : pathFor(other, 'home');
+const footerSite = ROUTE_KEYS.filter((k) => !(SYSTEM_KEYS as readonly string[]).includes(k));
+
+function isCurrent(key: RouteKey): boolean {
+  return key === route;
+}
+---
+
+<!doctype html>
+<html lang={d.htmlLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <link rel="preload" href={PRELOAD[locale]} as="font" type="font/woff2" crossorigin />
+    <style is:inline set:html={FONT_CSS}></style>
+    <meta name="description" content={meta.description} />
+    {route === null && <meta name="robots" content="noindex" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {
+      route &&
+        LOCALES.map((l) => (
+          <link rel="alternate" hreflang={t(l).htmlLang} href={new URL(pathFor(l, route), site).href} />
+        ))
+    }
+    {route && <link rel="alternate" hreflang="x-default" href={new URL(pathFor('ka', route), site).href} />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d1218" media="(prefers-color-scheme: dark)" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={meta.description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:locale" content={d.ogLocale} />
+    <meta property="og:locale:alternate" content={t(other).ogLocale} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={d.ui.ogImageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+  <body>
+    <a class="skip" href="#main">{d.ui.skipToContent}</a>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href={pathFor(locale, 'home')} aria-current={isCurrent('home') ? 'page' : undefined}>
+          <svg class="brand-mark" viewBox="0 0 32 32" width="28" height="28" aria-hidden="true" focusable="false">
+            <circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" stroke-width="2"></circle>
+            <circle cx="16" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="2" opacity="0.55"></circle>
+            <circle cx="16" cy="16" r="2.5" fill="currentColor"></circle>
+          </svg>
+          <span>{SITE_NAME}</span>
+        </a>
+        <nav class="nav-wide" aria-label={d.ui.primaryNav}>
+          <ul>
+            {
+              HEADER_NAV.map((key) => (
+                <li>
+                  <a href={pathFor(locale, key)} aria-current={isCurrent(key) ? 'page' : undefined}>
+                    {d.nav[key]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
+        <a class="lang" href={switchHref} hreflang={t(other).htmlLang} lang={t(other).htmlLang} title={d.ui.languageSwitch}>
+          <span class="visually-hidden">{d.ui.languageSwitch}: </span>{d.otherLanguageName}
+        </a>
+        <details class="nav-narrow">
+          <summary>{d.ui.menu}</summary>
+          <nav aria-label={d.ui.primaryNav}>
+            <ul>
+              <li><a href={pathFor(locale, 'home')} aria-current={isCurrent('home') ? 'page' : undefined}>{d.nav.home}</a></li>
+              {
+                HEADER_NAV.map((key) => (
+                  <li>
+                    <a href={pathFor(locale, key)} aria-current={isCurrent(key) ? 'page' : undefined}>
+                      {d.nav[key]}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </details>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap footer-grid">
+        <div>
+          <p class="footer-brand">{SITE_NAME}</p>
+          <p class="muted">{d.ui.footerTagline}</p>
+        </div>
+        <nav aria-label={d.ui.footerSystems}>
+          <p class="footer-head">{d.ui.footerSystems}</p>
+          <ul>
+            {SYSTEM_KEYS.map((key) => <li><a href={pathFor(locale, key)}>{d.systems[key].name}</a></li>)}
+          </ul>
+        </nav>
+        <nav aria-label={d.ui.footerSite}>
+          <p class="footer-head">{d.ui.footerSite}</p>
+          <ul>
+            {footerSite.map((key) => <li><a href={pathFor(locale, key)}>{d.nav[key]}</a></li>)}
+          </ul>
+        </nav>
+        <div>
+          <p class="footer-head">{d.ui.footerContact}</p>
+          <p><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
+          <p>
+            <a href={switchHref} hreflang={t(other).htmlLang} lang={t(other).htmlLang}>{d.otherLanguageName}</a>
+          </p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 4rem;
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--fg);
+    text-decoration: none;
+    margin-right: auto;
+    letter-spacing: -0.01em;
+  }
+
+  .brand-mark {
+    color: var(--accent);
+  }
+
+  .nav-wide ul,
+  .nav-narrow ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-wide ul {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .nav-wide li + li,
+  .nav-narrow li + li {
+    margin-top: 0;
+  }
+
+  .nav-wide a,
+  .nav-narrow a {
+    display: block;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    color: var(--fg);
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .nav-wide a:hover,
+  .nav-narrow a:hover {
+    background: var(--surface-2);
+  }
+
+  .nav-wide a[aria-current='page'],
+  .nav-narrow a[aria-current='page'] {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .lang {
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    text-decoration: none;
+    color: var(--fg);
+  }
+
+  .lang:hover {
+    border-color: var(--accent);
+  }
+
+  .nav-narrow {
+    display: none;
+  }
+
+  .nav-narrow summary {
+    cursor: pointer;
+    list-style: none;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .nav-narrow summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .nav-narrow[open] {
+    flex-basis: 100%;
+    order: 10;
+  }
+
+  .nav-narrow[open] summary {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-narrow[open] nav {
+    padding-bottom: 0.75rem;
+  }
+
+  @media (max-width: 63.99rem) {
+    .nav-wide {
+      display: none;
+    }
+    .nav-narrow {
+      display: block;
+    }
+  }
+
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+    padding: 2.5rem 0 3rem;
+    margin-top: 3rem;
+    font-size: 0.95rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 40rem) {
+    .footer-grid {
+      grid-template-columns: 2fr 1fr 1fr 1.2fr;
+    }
+  }
+
+  .footer-brand {
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-head {
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .site-footer ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-footer li + li {
+    margin-top: 0.25rem;
+  }
+
+  main:focus {
+    outline: none;
+  }
+</style>

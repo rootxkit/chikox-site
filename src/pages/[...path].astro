@@ -1,0 +1,39 @@
+---
+// Every page in both locales: Georgian at /, English at /en/.
+import type { GetStaticPaths } from 'astro';
+import Base from '../layouts/Base.astro';
+import Contact from '../components/pages/Contact.astro';
+import Home from '../components/pages/Home.astro';
+import OpenSource from '../components/pages/OpenSource.astro';
+import Platform from '../components/pages/Platform.astro';
+import Security from '../components/pages/Security.astro';
+import Sensors from '../components/pages/Sensors.astro';
+import System from '../components/pages/System.astro';
+import { LOCALES, ROUTE_KEYS, SYSTEM_KEYS, pathFor, type Locale, type RouteKey, type SystemKey } from '../i18n';
+
+export const getStaticPaths = (() =>
+  LOCALES.flatMap((locale) =>
+    ROUTE_KEYS.map((route) => {
+      const path = pathFor(locale, route).replace(/^\/|\/$/g, '');
+      return { params: { path: path || undefined }, props: { locale, route } };
+    }),
+  )) satisfies GetStaticPaths;
+
+interface Props {
+  locale: Locale;
+  route: RouteKey;
+}
+
+const { locale, route } = Astro.props;
+const isSystem = (SYSTEM_KEYS as readonly string[]).includes(route);
+---
+
+<Base locale={locale} route={route}>
+  {route === 'home' && <Home locale={locale} />}
+  {route === 'platform' && <Platform locale={locale} />}
+  {isSystem && <System locale={locale} system={route as SystemKey} />}
+  {route === 'sensors' && <Sensors locale={locale} />}
+  {route === 'security' && <Security locale={locale} />}
+  {route === 'openSource' && <OpenSource locale={locale} />}
+  {route === 'contact' && <Contact locale={locale} />}
+</Base>
