@@ -32,7 +32,7 @@ npm run verify    # check, build, link check and forbidden-string check
 | `src/components/Architecture.astro`, `Pipeline.astro` | Inline SVG diagrams; colours follow the theme |
 | `src/data/screenshots.ts` | Console screenshots per page. Empty: nothing is rendered until entries are added (see the comment in the file) |
 | `src/pages/404.astro`, `sitemap.xml.ts`, `robots.txt.ts` | 404 page (both languages), sitemap with hreflang alternates, robots |
-| `public/_headers` | Security and cache headers, applied by Cloudflare Pages |
+| `public/_headers` | Security and cache headers, applied by Cloudflare |
 | `scripts/check-links.mjs` | Internal link checker used in CI |
 | `scripts/check-forbidden.mjs` | Fails CI if the built site contains hostnames, addresses or other text that must not be published |
 
@@ -41,29 +41,27 @@ It names no hostnames, addresses, sign-in URLs, configuration names,
 customers, countries or agencies, and links only to public repositories.
 `scripts/check-forbidden.mjs` enforces part of this; review covers the rest.
 
-## Cloudflare Pages
+## Cloudflare Workers
 
-Create a Pages project connected to this repository (Workers & Pages,
-Create, Pages, Connect to Git) with:
+The site is deployed as a Worker with static assets only (no Worker
+script): `wrangler.jsonc` points at `dist/`, serves `404.html` for unknown
+paths and applies `public/_headers`. Connect this repository under Workers
+& Pages, Create, Import a repository, with:
 
 | Setting | Value |
 |---|---|
 | Production branch | `main` |
-| Framework preset | Astro |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 | Root directory | (empty) |
-| Environment variable | `NODE_VERSION` = `22` (Pages also reads `.nvmrc`) |
 
-`public/_headers` is copied to `dist/` and applied by Pages. `404.html` in
-the output makes Pages answer unknown paths with a 404 and that page.
+Node comes from `.nvmrc`.
 
 ### Custom domain
 
-1. In the Pages project: Custom domains, Set up a custom domain, enter
-   `chikox.net`. With the zone on Cloudflare, Pages creates the DNS record
-   itself; otherwise add a `CNAME` for the apex (flattened) to
-   `<project>.pages.dev` as shown.
+1. In the Worker: Settings, Domains & Routes, Add, Custom domain, enter
+   `chikox.net`. With the zone on Cloudflare, the DNS record is created
+   for you; an existing record on that name must be removed first.
 2. Repeat for `www.chikox.net`, then add a redirect rule (Rules, Redirect
    Rules) from `www.chikox.net/*` to `https://chikox.net/${1}`, status 301,
    so there is one canonical host.
