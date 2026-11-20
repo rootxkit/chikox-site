@@ -137,6 +137,8 @@ export interface Dict {
     doesNot: string[];
     sharedTitle: string;
     shared: Section[];
+    deliveryTitle: string;
+    delivery: Section[];
   };
   systems: Record<SystemKey, SystemContent>;
   sensors: {

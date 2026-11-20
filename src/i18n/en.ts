@@ -12,7 +12,7 @@ export const en: Dict = {
     systemsNav: 'Systems',
     languageSwitch: 'Language',
     footerTagline:
-      'A platform for national-scale U-space. It observes and informs; it never commands an aircraft.',
+      'A platform designed for national-scale U-space. It observes and informs; it never commands an aircraft.',
     footerSystems: 'Systems',
     footerSite: 'Site',
     footerContact: 'Contact',
@@ -41,7 +41,7 @@ export const en: Dict = {
     home: {
       title: 'chikox — U-space airspace platform',
       description:
-        'chikox is a platform for national-scale U-space: four cooperating systems and receive-only sensors that register drones, publish airspace information, support flight planning and watch the sky. It never commands an aircraft.',
+        'chikox is a platform designed for national-scale U-space: four cooperating systems and receive-only sensors that register drones, publish airspace information, support flight planning and watch the sky. It never commands an aircraft.',
     },
     platform: {
       title: 'Platform',
@@ -92,9 +92,9 @@ export const en: Dict = {
     eyebrow: 'U-space airspace platform',
     title: 'One picture of the low-altitude airspace, from independent sources.',
     lead:
-      'chikox is a platform for national-scale U-space. Four cooperating systems and a network of receive-only sensors keep the registry, publish airspace information, support flight planning and watch the sky. It observes and informs; it never commands an aircraft.',
+      'chikox is a platform designed for national-scale U-space. Four cooperating systems and a network of receive-only sensors keep the registry, publish airspace information, support flight planning and watch the sky. It observes and informs; it never commands an aircraft.',
     primaryCta: 'See the platform',
-    secondaryCta: 'Sensors',
+    secondaryCta: 'Request a demonstration',
     systemsTitle: 'Four systems, one ecosystem',
     systemsLead:
       'Each system has a single role from the EU U-space model and talks to the others through standard or published interfaces.',
@@ -127,7 +127,7 @@ export const en: Dict = {
       },
       {
         title: 'Standard interfaces',
-        body: 'Systems exchange information through ASTM, EUROCAE and published OpenAPI contracts, so a third-party USSP can join on equal terms.',
+        body: 'Systems exchange information through ASTM, EUROCAE and documented OpenAPI contracts, so a third-party USSP can join on equal terms.',
       },
     ],
     sensorsTitle: 'Sensors on the ground',
@@ -186,7 +186,7 @@ export const en: Dict = {
       'Defines geographical zones and U-space airspace and publishes them in the EUROCAE ED-318 format.',
       'Activates time-bounded restrictions inside U-space airspace and delivers them to every service provider.',
       'Builds an airspace picture from direct Remote ID, network identification and manned traffic, with the source and trust of each track shown.',
-      'Detects violations from its own evidence: height limit, zone incursion, unregistered aircraft, identification mismatch, flight without authorisation.',
+      'Detects violations from its own evidence: height limit, zone incursion, unregistered aircraft, identification mismatch and, inside designated U-space airspace, flight without authorisation.',
       'Authorises flights with strategic deconfliction and monitors their conformance.',
       'Records incidents with sealed evidence, keeps occurrence reports apart from enforcement, and logs every oversight act.',
     ],
@@ -220,6 +220,25 @@ export const en: Dict = {
         body: 'A separate lab runs every system from its images against simulated aircraft, operators, receivers, manned traffic and a second service provider, and runs the conformance and load tests.',
       },
     ],
+    deliveryTitle: 'How it is delivered',
+    delivery: [
+      {
+        title: 'Runs on your infrastructure',
+        body: 'Each system is delivered as signed container images with a software bill of materials, and is installed and updated from documented runbooks. Data stays in your own databases.',
+      },
+      {
+        title: 'Bring your own receivers',
+        body: 'The platform does not tie you to one device. Remote ID receivers report through a documented, authenticated contract, and manned traffic comes from a standard ADS-B decoder.',
+      },
+      {
+        title: 'Documented interfaces',
+        body: 'Every system has an OpenAPI 3.1 contract, and the exchanges between systems follow ASTM and EUROCAE formats. The interface documentation is available on request.',
+      },
+      {
+        title: 'See it running',
+        body: 'The whole platform can be demonstrated end to end against simulated aircraft, operators, receivers and manned traffic, before any hardware is installed.',
+      },
+    ],
   },
   systems: {
     authority: {
@@ -233,7 +252,7 @@ export const en: Dict = {
         'Geographical zones and U-space airspace designations, authored and versioned in ED-318 (ED-269 import supported) and published through the CISP.',
         'Certificates of USSPs and of the CISP, and the public register of certified providers.',
         'Its own airspace picture: direct Remote ID from its receivers, an ASTM F3411 Display Provider view of every USSP’s network identification, and manned traffic.',
-        'Violations from its own evidence: above the height limit, zone incursion, unregistered aircraft, identification mismatch, and flight without authorisation.',
+        'Violations from its own evidence: above the height limit, zone incursion, unregistered aircraft, identification mismatch and, inside designated U-space airspace, flight without authorisation.',
         'Incidents with evidence packs sealed by a SHA-256 hash, and recorded traffic history queried by time.',
         'Occurrence reports under Regulation (EU) 376/2014, kept separate from enforcement.',
         'An append-only audit log of every oversight view, export and change.',
@@ -246,7 +265,7 @@ export const en: Dict = {
         'Turn an occurrence report into a violation or use it against the reporter.',
       ],
       interfaces: [
-        'Published national API (OpenAPI 3.1)',
+        'Documented national API (OpenAPI 3.1)',
         'ASTM F3411 Display Provider',
         'EUROCAE ED-318 and ED-269 geographical zones',
         'Signed Remote ID observation reports from receivers',
@@ -281,7 +300,7 @@ export const en: Dict = {
         'Regulation (EU) 2021/664 and 2021/665 (ATS.OR.127, ATS.TR.237)',
         'ASTM F3548 constraints',
         'EUROCAE ED-318 restriction features',
-        'Published national API (OpenAPI)',
+        'Documented national API (OpenAPI 3.1)',
         'Mutual TLS for streams and publishing',
       ],
       worksWith: [
@@ -312,9 +331,9 @@ export const en: Dict = {
       interfaces: [
         'Regulation (EU) 2021/664 Art. 5 (common information services)',
         'EUROCAE ED-318',
-        'Published API (OpenAPI 3.1) with ETag and version deltas',
+        'Documented API (OpenAPI 3.1) with ETag and version deltas',
         'Signed webhooks (JWS) with a published key set',
-        'Mutual TLS for publishers',
+        'Authenticated publishers: mutual TLS or signed requests',
       ],
       worksWith: [
         { system: 'authority', text: 'publisher of zones, U-space airspace and the USSP list' },
@@ -327,7 +346,7 @@ export const en: Dict = {
       role: 'U-space Service Provider',
       card: 'Operator portal, network identification, flight authorisation, conformance monitoring and traffic information.',
       lead:
-        'A reference U-space service provider. It serves drone operators and the ecosystem through standard interfaces, and it is one of possibly many: a third party can build its own USSP against the same published contracts. It informs; it does not resolve.',
+        'A reference U-space service provider. It serves drone operators and the ecosystem through standard interfaces, and it is one of possibly many: a third party can build its own USSP against the same documented contracts. It informs; it does not resolve.',
       does: [
         'Operator portal and accounts, with machine clients for operators’ own software.',
         'Network identification as an ASTM F3411 Network Remote ID service provider.',
@@ -347,7 +366,7 @@ export const en: Dict = {
         'ASTM F3411 Network Remote ID',
         'ASTM F3548 strategic coordination and conformance',
         'EUROCAE ED-318 geo-awareness',
-        'Published operator API (OpenAPI)',
+        'Documented operator API (OpenAPI 3.1)',
       ],
       worksWith: [
         { system: 'cisp', text: 'subscribes to zones, airspace and restrictions' },
@@ -366,11 +385,10 @@ export const en: Dict = {
     receivesTitle: 'What it receives',
     rid: {
       title: 'Remote ID receivers',
-      body: 'Small ESP32-class receivers hear the direct Remote ID that drones broadcast over Bluetooth and Wi-Fi under ASTM F3411 and ASD-STAN prEN 4709-002. A receiver decodes nothing itself: it forwards each frame exactly as received, and decoding is done once, centrally.',
+      body: 'Remote ID receivers hear the direct Remote ID that drones broadcast over Bluetooth and Wi-Fi under ASTM F3411 and ASD-STAN prEN 4709-002. A receiver decodes nothing itself: it forwards each frame exactly as received, and decoding is done once, centrally. Any receiver that implements the documented receiver contract can report.',
       receives: [
         'Identification: serial number, operator registration and the broadcast type',
         'Position, altitude, speed and heading of the drone',
-        'Take-off or operator position, where it is broadcast',
         'Signal strength and the receiver’s own reception time',
       ],
       path: {
@@ -387,7 +405,7 @@ export const en: Dict = {
         'It is registered with its mounted position and receives its own credentials once; they cannot be read back, only rotated.',
         'Every report carries the receiver’s key and a signature over the exact bytes sent.',
         'Reports far from the platform’s clock, or repeating an earlier request, are refused.',
-        'While the platform is unreachable the receiver buffers and later replays what it heard, with the original reception times.',
+        'After an outage a receiver can replay what it heard: the platform accepts the backlog with the original reception times.',
         'Credentials rotate with a grace period, or are revoked at once if a receiver is lost; a receiver that reports from away from its mounted position is recorded.',
       ],
     },
@@ -411,16 +429,15 @@ export const en: Dict = {
       connectTitle: 'How a receiver connects',
       connect: [
         'The receiver reaches the platform only through an encrypted point-to-point tunnel; nothing else of it is exposed.',
-        'Its clock must be synchronised: positions timed ahead of the platform’s clock are refused.',
+        'Its clock must be synchronised: a position timed ahead of the platform’s clock is not trusted; it is re-timed on arrival and counted.',
         'One adapter per feed: each surveillance source has its own process and its own switch.',
       ],
     },
     relay: {
       title: 'Operator telemetry (optional)',
-      body: 'Cooperative operators can also share their own telemetry. It is the richest feed — position plus battery, flight mode and GPS quality — but it depends on the operator, so it complements Remote ID and never replaces it.',
+      body: 'Cooperative operators can also share their own telemetry through their USSP: position, height, speed and their accuracy. It depends on the operator, so it complements Remote ID and never replaces it.',
       items: [
-        'Through a USSP: operator software streams telemetry to its USSP over an authenticated connection.',
-        'Through a ground relay: a receive-only relay forwards the MAVLink stream of the ground control station over TLS. Its socket only receives; it never sends anything towards the vehicle.',
+        'Operator software streams telemetry to its USSP over an authenticated connection.',
       ],
     },
     silentTitle: 'A silent source is shown as silent',
@@ -435,7 +452,7 @@ export const en: Dict = {
       {
         title: 'Systems authenticate each other',
         items: [
-          'Mutual TLS between systems.',
+          'Mutual TLS on machine-to-machine routes between systems.',
           'Short-lived, scoped and audience-bound OAuth2 tokens from one ecosystem issuer, with a published key set.',
           'Webhooks signed by the sender and verified by the receiver.',
         ],
@@ -460,15 +477,15 @@ export const en: Dict = {
         items: [
           'Container images are built in CI only, signed, and carry a software bill of materials (SBOM); signatures are verified before deployment.',
           'Dependencies are pinned and verified by checksum.',
-          'Secret scanning in CI; no secret, key or real hostname is ever committed.',
+          'Secret scanning in CI; no secret or key is ever committed.',
         ],
       },
       {
         title: 'Personal data is protected',
         items: [
-          'Personal data is encrypted at the application layer.',
+          'Registry personal data is encrypted at the application layer.',
           'Registration checks answer with status only.',
-          'The public network identification view leaves out the remote pilot’s position.',
+          'The remote pilot’s position is shown only to authorised oversight roles.',
           'The identity of an occurrence reporter is visible only to the role that handles occurrence reports.',
         ],
       },
@@ -482,7 +499,7 @@ export const en: Dict = {
       },
     ],
     standardsTitle: 'Regulations and standards',
-    standardsLead: 'The systems are designed against the following texts.',
+    standardsLead: 'The systems are designed against the following texts and their published data schemas.',
     standardsHead: { name: 'Text', scope: 'What it covers here' },
     standards: [
       { name: 'Regulation (EU) 2021/664', scope: 'The U-space regulatory framework: roles, services, common information' },
@@ -533,16 +550,17 @@ export const en: Dict = {
       'Please report security issues privately by email to info@chikox.net, not in public.',
     otherTitle: 'The systems themselves',
     other:
-      'The four systems are built on these components. Their source is not published on this site.',
+      'The four systems are built on these components. Their source is not public.',
   },
   contact: {
     title: 'Contact',
-    lead: 'For questions about the platform, the standards it follows or the open-source components, write to us.',
+    lead: 'To arrange a demonstration, discuss a deployment or ask about the platform, write to us.',
     emailLabel: 'Email',
-    topicsTitle: 'Good topics to write about',
+    topicsTitle: 'What to write about',
     topics: [
-      'How the systems fit the U-space role model',
-      'Interfaces for a third-party USSP',
+      'A demonstration of the platform against simulated traffic',
+      'Deploying the platform for an authority, an ANSP or a service provider',
+      'Interface documentation for a third-party USSP',
       'Remote ID and ADS-B receivers',
       'The open-source components',
     ],
